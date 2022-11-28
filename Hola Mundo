@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hola Mundo</title>
+  </head>
+  <body>
+    <h1>
+    	<?php
+		
+	    	//Comentario de Daniel García Figueroa
+		
+	    	$yo= "Daniel García Figueroa";
+		
+	    	echo "Soy $yo";
+	
+	
+     	?>
+  
+    </h1>
+  </body>
+</html>
