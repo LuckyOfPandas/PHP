@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<?php
+
+  
+  
+	$n = 3;
+    
+    if($n%2 == 0) {
+    
+    echo "Soy un número par";
+    
+    }
+    else {
+    
+    echo "Soy un número impar";
+    }
+    
+    
+    
+?> 
+
+</body>
+</html>
