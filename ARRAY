@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<?php
+
+/*Declara dos arrays:
+
+* uno de motos con cuatro motos
+
+* uno de coches con cuatro coches
+*/
+
+$coche=array("llanta","rueda","motor","volante");
+$moto=array("llanta","rueda","motor","color");
+
+var_dump ($coche);
+echo "<br>";
+var_dump ($moto);
+
+
+
+?> 
+
+</body>
+</html>
