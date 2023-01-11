@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<?php
+// Calcula la calificación en palabras de la nota de un examen almacenada en una variable (5 y 6 aprobado, 7 y 8 notable, 9 y 10 sobresaliente) mediante una estructura switch
+
+/*MEDIANTE UN IF SERIA LO SIGUIENTE
+$numero=7;
+if ($numero<10 && $numero>=5) {
+	if($numero>=5 && $numero<7){
+    echo "Aprobado";
+    }elseif ($numero>=7 && $numero<9){
+    echo "Notable";
+    }elseif ($numero>=9 && $numero<=10) {
+    echo "Sobresaliente";
+    }
+}elseif ($numero<5) {
+echo "Suspenso";
+}else {
+echo "Este número no es sobre 10";
+}
+*/
+
+//Mediante un switch sería lo siguiente:
+$nota=4;
+switch ($nota) {
+  case $nota<5;
+  echo "Suspenso";
+  break;
+  case 5:
+  case 6:
+   echo "Aprobado";
+    break;
+  case 7:
+  case 8:
+    echo "Notable";
+    break;
+  case 9:
+  case 10:
+    echo "Sobresaliente";
+    break;
+  default:
+    echo "Calificación no válida";
+}
+
+
+?> 
+
+</body>
+</html>
