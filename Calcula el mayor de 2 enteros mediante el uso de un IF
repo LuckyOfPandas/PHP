@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<?php
+// 1. Calcula el mayor de 2 enteros mediante el uso de un IF
+
+$numero1=15;
+$numero2=12;
+
+if($numero1>$numero2){
+echo $numero1;
+}
+else {
+echo $numero2;
+}
+?> 
+
+</body>
+</html>
