@@ -3,23 +3,69 @@
 <body>
 
 <?php
-
 /*Declara dos arrays:
 
 * uno de motos con cuatro motos
 
 * uno de coches con cuatro coches
+a) Recorre uno de los arrays mostrando sus elementos
+
+b) Ordena y muestra sus elementos
+
+c) Haz que lo indicado en a y b se realice mediante una llamada a la funcion mostrarResultadosOrdenados
+
+d) Indica por pantalla cuantos elementos hay
+
+e) Busca si un elemento se encuentro e informa de ello
 */
 
-$coche=array("llanta","rueda","motor","volante");
-$moto=array("llanta","rueda","motor","color");
+$coches=array("llanta","rueda","motor","volante");
+$motos=array("llanta","rueda","motor","color");
 
-var_dump ($coche);
-echo "<br>";
-var_dump ($moto);
+//ejercicios
+//A
 
+echo "<br>a)<br><br>";
+var_dump ($coches);
 
+//B
+echo "<br><br>b)<br><br>";
+sort($motos);
+foreach($motos as $moto) {
+    echo $moto . ", ";
+}
 
+//C
+
+echo "<br><br>c)<br><br>";
+
+function mostrarResultadosOrdenados($coches, $motos){
+    sort($coches);
+    foreach($coches as $coche){
+        echo $coche . "<br>";
+    }
+    echo "<br>";
+    sort($motos);
+    foreach($motos as $moto){
+        echo $moto . "<br>";
+    }
+} mostrarResultadosOrdenados($coches, $motos);
+
+//D
+
+echo "<br><br>d)<br><br>";
+echo "Existen " . count($motos) . " elementos para  motos y " . count($coches) . " para coches.";
+
+//E
+
+echo "<br><br>e)<br><br>";
+//INTRODUCIMOS LA VARIABLE A BUSCAR (AUNQUE TAMBIÉN PODEMOS HACERLO ASÍ:  in_array("color", $motos)
+$variableBUSCAR = "color";
+if (in_array($variableBUSCAR, $motos)){
+    echo $variableBUSCAR . " se encuentra en la lista de motos.";
+} else {
+    echo $variableBUSCAR . " no se encuentra en la lista de motos.";
+}
 ?> 
 
 </body>
