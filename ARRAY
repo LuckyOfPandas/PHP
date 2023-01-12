@@ -67,6 +67,5 @@ if (in_array($variableBUSCAR, $motos)){
     echo $variableBUSCAR . " no se encuentra en la lista de motos.";
 }
 ?> 
-
 </body>
 </html>
