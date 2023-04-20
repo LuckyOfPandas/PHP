@@ -1,0 +1,37 @@
+//PRIMER ARCHIVO index.php
+<html>
+<body>
+<form method="post" action="recoge.php">
+Name: <input type="fname" name="name"><br><br>
+Email: <input type="email" name="email"><br><br>
+Website: <input type="url" name="website"><br><br>
+Comment: <textarea name="textarea" rows="10" cols="50">Write something here</textarea><br><br>
+Gender : <input type="radio" name="gender" value="female" id="female">
+  <label for="female">Female</label>
+  <input type="radio" name="gender" value="male" id="male">
+  <label for="male">Male</label>
+  <input type="radio" id="other" name="gender" value="other">
+  <label for="other">Other</label><br>
+  
+<br><input type="submit">
+
+</form>
+
+
+</body>
+</html>
+
+//SEGUNDO ARCHIVO recoge.php
+<html>
+<body>
+
+<h1> PHP Form Validation Example</h1>
+<br><br>
+<?php echo $_POST["name"]; ?><br>
+<?php echo $_POST["email"]; ?><br>
+<?php echo $_POST["website"]; ?><br>
+<?php echo $_POST["textarea"]; ?><br>
+<?php echo $_POST["gender"]; ?><br>
+
+</body>
+</html>
