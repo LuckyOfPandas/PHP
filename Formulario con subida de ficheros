@@ -1,0 +1,38 @@
+//PRIMER DOCUMENTO PHP index.php
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Subir Archivos</title>
+</head>
+<body>
+	<h1>Subir Archivos</h1>
+	<form action="upload.php" method="post" enctype="multipart/form-data">
+		<label for="file">Seleccionar Archivo:</label>
+		<input type="file" name="file" id="file"><br><br>
+		<input type="submit" name="submit" value="Subir Archivo">
+	</form>
+</body>
+</html>
+
+// SEGUNDO DOCUMENTO PHP upload.php
+<?php
+if(isset($_POST['submit'])){
+    $archivo = $_FILES['file'];
+    $nombreArchivo = $archivo['name'];
+    $tipoArchivo = $archivo['type'];
+    $tamanoArchivo = $archivo['size'];
+    $tempArchivo = $archivo['tmp_name'];
+    $errorArchivo = $archivo['error'];
+
+    $destino = 'uploads/' . $nombreArchivo;
+
+    if(move_uploaded_file($tempArchivo, $destino)){
+        echo "El archivo se subió correctamente.";
+    } else {
+        echo "Error al subir el archivo.";
+    }
+}
+?>
+
+// RECORDAMOS que  para que este código funcione, debemos crear la carpeta uploads en el mismo directorio donde se encuentra el archivo upload.php
