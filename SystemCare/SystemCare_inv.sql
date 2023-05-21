@@ -1,9 +1,6 @@
 -- phpMyAdmin SQL Dump
 -- version 5.2.0
--- https://www.phpmyadmin.net/
---
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-03-2023 a las 18:47:31
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -51,6 +48,7 @@ CREATE TABLE `pedidos` (
 
 CREATE TABLE `productos` (
   `id` int(11) NOT NULL,
+  `stock` int(11) NOT NULL,
   `categoria` varchar(255) NOT NULL,
   `color` varchar(255) NOT NULL,
   `marca` varchar(255) NOT NULL,
@@ -61,17 +59,17 @@ CREATE TABLE `productos` (
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`id`, `categoria`, `color`, `marca`, `precio`) VALUES
-(1, 'camiseta', 'negra', 'nike', 40),
-(2, 'camiseta', 'azul', 'adidas', 38),
-(3, 'camiseta', 'verde', 'zara', 20),
-(4, 'camiseta', 'gris', 'gucci', 100),
-(5, 'camiseta', 'negra', 'adidas', 42),
-(6, 'camiseta', 'azul', 'levis', 50),
-(7, 'sudadera', 'negra', 'nike', 70),
-(8, 'sudadera', 'gris', 'adidas', 56),
-(9, 'pantalon', 'vaquero', 'levis', 70),
-(10, 'pantalon', 'azul', 'zara', 30);
+INSERT INTO `productos` (`id`, `stock`, `categoria`, `color`, `marca`, `precio`) VALUES
+(1, 79, 'camiseta', 'negra', 'nike', 40),
+(2, 62, 'camiseta', 'azul', 'adidas', 38),
+(3, 53, 'camiseta', 'verde', 'zara', 20),
+(4, 57, 'camiseta', 'gris', 'gucci', 100),
+(5, 38, 'camiseta', 'negra', 'adidas', 42),
+(6, 60, 'camiseta', 'azul', 'levis', 50),
+(7, 30, 'sudadera', 'negra', 'nike', 70),
+(8, 36, 'sudadera', 'gris', 'adidas', 56),
+(9, 42, 'pantalon', 'vaquero', 'levis', 70),
+(10, 25, 'pantalon', 'azul', 'zara', 30);
 
 -- --------------------------------------------------------
 
@@ -81,26 +79,27 @@ INSERT INTO `productos` (`id`, `categoria`, `color`, `marca`, `precio`) VALUES
 
 CREATE TABLE `usuarios` (
   `usuario` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `identidad` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`usuario`, `password`) VALUES
-('dgarcia', 'abc123.'),
-('jferreiro', 'abc123.'),
-('afernandez', 'abc123.'),
-('xgarcia', 'abc123.'),
-('psanchez', 'abc123.'),
-('mlopez', 'abc123.'),
-('ateijido', 'abc123.'),
-('pvazquez', 'abc123.'),
-('dpena', 'abc123.'),
-('jgarrote', 'abc123.'),
-('bfeal', 'abc123.'),
-('egarcia', 'abc123.');
+INSERT INTO `usuarios` (`usuario`, `password`, `identidad`) VALUES
+('dgarcia', 'abc123.', 'Daniel Garcia Figueroa'),
+('jferreiro', 'abc123.', 'Joam Ferreiro Garrote '),
+('afernandez', 'abc123.', 'Ana Fernandez Feal'),
+('xgarcia', 'abc123.', 'Xalo Garcia Teijido'),
+('psanchez', 'abc123.', 'Pablo Sanchez Lopez'),
+('mlopez', 'abc123.', 'Manuel Lopez Figueroa'),
+('ateijido', 'abc123.', 'Alejandro Teijido Fernandez'),
+('pvazquez', 'abc123.', 'Pablo Vazquez García'),
+('dpena', 'abc123.', 'David Pena Sanchez'),
+('jgarrote', 'abc123.', 'Joel Garrote Feal'),
+('bfeal', 'abc123.', 'Beatriz Feal García'),
+('egarcia', 'abc123.', 'Enrique Garcia Couce');
 
 --
 -- Índices para tablas volcadas
@@ -159,6 +158,30 @@ COMMIT;
 
 -- Encriptar contraseñas utilizando SHA-256
 UPDATE usuarios SET password = SHA2(password, 256);
+
+--TRIGGER PARA ACTUALIZAR EL STOCK
+DELIMITER $$
+CREATE TRIGGER actualizar_stock
+BEFORE INSERT ON linea_pedido
+FOR EACH ROW
+BEGIN
+    DECLARE stock_actual INT;
+    SET stock_actual = (
+        SELECT stock
+        FROM productos
+        WHERE id = NEW.idProducto
+    );
+    IF stock_actual <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No hay stock disponible para este producto.';
+    ELSE
+        UPDATE productos
+        SET stock = stock - 1
+        WHERE id = NEW.idProducto;
+    END IF;
+END;
+$$
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
