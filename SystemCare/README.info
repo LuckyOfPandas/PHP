@@ -1,0 +1,4 @@
+-BASE DE DATOS
+Base de datos que actua como inventario de solitudes de una "tienda", al mismo tiempo guarda las contraseñas de inicio de sesión de los usuarios encriptadas con sha256
+-Página web de gestión se solicitudes de inventario
+-PHP que une la página web con la base de datos
