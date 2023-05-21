@@ -15,21 +15,30 @@ if (!$conn) {
     die("Conexión fallida: " . mysqli_connect_error());
 }
 
-
-
 // Obtener el email y la contraseña del formulario
 $email = $_POST['email'];
 $password = $_POST['psw'];
 
-// HAGO ESTO PARA QUE AL ENTRAR EN UNA PÁGINA QUE NO SEA EL LOGIN SIN SESIÓN INICIADA LUEGO TE REDIRIGA AL LOGIN DIRECTAMENTE
 // Ahora que sabemos que los credenciales son correctos, guardamos el correo electrónico en una variable de sesión
 $_SESSION['email'] = $email;
 
-// Construir la consulta SQL
-$sql = "SELECT * FROM usuarios WHERE email = '$email' AND password = '$password'";
+// Construir la consulta preparada
+$sql = "SELECT * FROM usuarios WHERE email = ? AND password = ?";
+$stmt = mysqli_prepare($conn, $sql);
 
-// Ejecutar la consulta SQL
-$resultado = mysqli_query($conn, $sql);
+// Verificar si ocurrió un error al preparar la consulta
+if (!$stmt) {
+    die("Error en la consulta preparada: " . mysqli_error($conn));
+}
+
+// Vincular los parámetros a los marcadores de posición
+mysqli_stmt_bind_param($stmt, "ss", $email, $password);
+
+// Ejecutar la consulta preparada
+mysqli_stmt_execute($stmt);
+
+// Obtener el resultado de la consulta
+$resultado = mysqli_stmt_get_result($stmt);
 
 // Verificar si se encontró un registro con las credenciales proporcionadas
 if (mysqli_num_rows($resultado) == 1) {
@@ -40,9 +49,9 @@ if (mysqli_num_rows($resultado) == 1) {
     header("Location: index.php");
 }
 
+// Cerrar la consulta preparada
+mysqli_stmt_close($stmt);
+
 // Cerrar la conexión
 mysqli_close($conn);
-
-
-
 ?>

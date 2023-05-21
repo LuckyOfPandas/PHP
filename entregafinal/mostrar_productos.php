@@ -39,7 +39,6 @@ if (!isset($_SESSION['carro'])) {
 			$password = "";
 			$dbname = "tienda";
 
-
 		// Crear la conexión
 			$conn = mysqli_connect($servername, $username, $password, $dbname);
 
@@ -48,15 +47,31 @@ if (!isset($_SESSION['carro'])) {
 				die("Conexión fallida: " . mysqli_connect_error());
 			}
 
-		// Construir la consulta SQL
+		// Construir la consulta preparada
 			$categoria = $_GET["categoria"] ?? "";
 			$sql = "SELECT id, categoria, color, marca, precio FROM productos";
 			if (!empty($categoria)) {
-				$sql .= " WHERE categoria='$categoria'";
+				$sql .= " WHERE categoria=?";
 			}
 
-		// Ejecutar la consulta SQL
-			$resultado = mysqli_query($conn, $sql);
+		// Preparar la consulta
+			$stmt = mysqli_prepare($conn, $sql);
+
+		// Verificar si ocurrió un error al preparar la consulta
+			if (!$stmt) {
+				die("Error en la consulta preparada: " . mysqli_error($conn));
+			}
+
+		// Vincular el parámetro al marcador de posición
+			if (!empty($categoria)) {
+				mysqli_stmt_bind_param($stmt, "s", $categoria);
+			}
+
+		// Ejecutar la consulta preparada
+			mysqli_stmt_execute($stmt);
+
+		// Obtener el resultado de la consulta
+			$resultado = mysqli_stmt_get_result($stmt);
 
 		// Mostrar los productos en una tabla
     echo "<table id='categorias'>";

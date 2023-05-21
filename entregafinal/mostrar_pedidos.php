@@ -45,11 +45,12 @@
         FROM pedidos 
         INNER JOIN linea_pedido ON pedidos.idPedido = linea_pedido.idPedido 
         INNER JOIN productos ON linea_pedido.idProducto = productos.id 
-        WHERE pedidos.usuario = 'alumno@alumno.com'";
+        WHERE pedidos.usuario = ?";
 
-
-    // Ejecutar la consulta SQL
-    $resultado = mysqli_query($conn, $sql);
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+    $resultado = mysqli_stmt_get_result($stmt);
 
     // Mostrar los productos en una tabla
     echo '<table id="categorias">';

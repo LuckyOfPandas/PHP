@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mostrar Productos</title>
+    <title>Mostrar camisetas</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="fondo">
@@ -38,17 +38,32 @@
         die("Conexión fallida: " . mysqli_connect_error());
     }
 
-    // Construir la consulta SQL
-    $sql = "SELECT id, categoria, color, marca, precio FROM productos WHERE categoria='camiseta'";
+    // Construir la consulta preparada
+    $sql = "SELECT id, categoria, color, marca, precio FROM productos WHERE categoria=?";
 
-    // Ejecutar la consulta SQL
-    $resultado = mysqli_query($conn, $sql);
+    // Preparar la consulta
+    $stmt = mysqli_prepare($conn, $sql);
+
+    // Verificar si ocurrió un error al preparar la consulta
+    if (!$stmt) {
+        die("Error en la consulta preparada: " . mysqli_error($conn));
+    }
+
+    // Vincular el parámetro al marcador de posición
+    $categoria = 'camiseta';
+    mysqli_stmt_bind_param($stmt, "s", $categoria);
+
+    // Ejecutar la consulta preparada
+    mysqli_stmt_execute($stmt);
+
+    // Obtener el resultado de la consulta
+    $resultado = mysqli_stmt_get_result($stmt);
 
     // Mostrar los productos en una tabla
     echo "<table id='categorias'>";
     echo "<tr><th>Categoría</th><th>Color</th><th>Marca</th><th>Precio</th><th>🛒</th></tr>";
     while ($fila = mysqli_fetch_assoc($resultado)) {
-      echo "<tr><td>" . $fila["categoria"] . "</td><td>" . $fila["color"] . "</td><td>" . $fila["marca"] . "</td><td>" . $fila["precio"] . "</td><td><form action='carro.php' method='POST'><input type='hidden' name='id' value='" . $fila["id"] . "'><input type='hidden' name='categoria' value='" . $fila["categoria"] . "'><input type='hidden' name='color' value='" . $fila["color"] . "'><input type='hidden' name='marca' value='" . $fila["marca"] . "'><input type='hidden' name='precio' value='" . $fila["precio"] . "'><button type='submit'>Añadir al carro</button></form></td></tr>";
+        echo "<tr><td>" . $fila["categoria"] . "</td><td>" . $fila["color"] . "</td><td>" . $fila["marca"] . "</td><td>" . $fila["precio"] . "</td><td><form action='carro.php' method='POST'><input type='hidden' name='id' value='" . $fila["id"] . "'><input type='hidden' name='categoria' value='" . $fila["categoria"] . "'><input type='hidden' name='color' value='" . $fila["color"] . "'><input type='hidden' name='marca' value='" . $fila["marca"] . "'><input type='hidden' name='precio' value='" . $fila["precio"] . "'><button type='submit'>Añadir al carro</button></form></td></tr>";
     }
     echo "</table>";
 
