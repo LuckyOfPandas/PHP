@@ -19,14 +19,16 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
-
+CREATE DATABASE IF NOT EXISTS SystemCare_inv;
+USE SystemCare_inv;
 --
 -- Estructura de tabla para la tabla `linea_pedido`
 --
 
 CREATE TABLE `linea_pedido` (
   `idPedido` int(11) NOT NULL,
-  `idProducto` int(11) NOT NULL
+  `idProducto` int(11) NOT NULL,
+  `unidades` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -50,8 +52,8 @@ CREATE TABLE `productos` (
   `id` int(11) NOT NULL,
   `stock` int(11) NOT NULL,
   `categoria` varchar(255) NOT NULL,
-  `color` varchar(255) NOT NULL,
-  `marca` varchar(255) NOT NULL,
+  `caracteristicas` varchar(255) NOT NULL,
+  `Distribuidor` varchar(255) NOT NULL,
   `precio` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -59,17 +61,26 @@ CREATE TABLE `productos` (
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`id`, `stock`, `categoria`, `color`, `marca`, `precio`) VALUES
-(1, 79, 'camiseta', 'negra', 'nike', 40),
-(2, 62, 'camiseta', 'azul', 'adidas', 38),
-(3, 53, 'camiseta', 'verde', 'zara', 20),
-(4, 57, 'camiseta', 'gris', 'gucci', 100),
-(5, 38, 'camiseta', 'negra', 'adidas', 42),
-(6, 60, 'camiseta', 'azul', 'levis', 50),
-(7, 30, 'sudadera', 'negra', 'nike', 70),
-(8, 36, 'sudadera', 'gris', 'adidas', 56),
-(9, 42, 'pantalon', 'vaquero', 'levis', 70),
-(10, 25, 'pantalon', 'azul', 'zara', 30);
+INSERT INTO `productos` (`id`, `stock`, `categoria`, `caracteristicas`, `distribuidor`, `precio`) VALUES
+(2, 62, 'Adaptador', 'VGA-HDMI', 'SystemCare', 7.21),
+(3, 53, 'Adaptador', 'VGA-DP', 'SystemCare', 8.99),
+(4, 57, 'Adaptador', 'DVI-DP', 'SystemCare', 10.56),
+(5, 38, 'Adaptador', 'USB-RJ45', 'SystemCare', 12.09),
+(6, 60, 'Adaptador', 'USB C-RJ45', 'SystemCare', 14.12),
+(7, 30, 'Cable', 'VGA 1.8m', 'SystemCare', 18.99),
+(8, 36, 'Cable', 'DP 1.8m', 'SystemCare', 16.03),
+(11, 36, 'Cable', 'DVI 1.8m', 'SystemCare', 11.02),
+(12, 36, 'Cable', 'RJ-45 30m Cat6', 'SystemCare', 31.39),
+(13, 36, 'Cable', 'RJ-45 15m Cat6', 'SystemCare', 21.02),
+(14, 36, 'Cable', 'RJ-45 1.8m Cat6', 'SystemCare', 14.21),
+(9, 42, 'Otro', 'Pila placa base', 'SystemCare', 2.21),
+(10, 25, 'Otro', 'EjemploX', 'SystemCare', 12.12),
+(15, 36, 'Portatil', 'Dell Latitude 5570', 'Dell', 2500.56),
+(16, 36, 'Portatil', 'Hp Probook 430 G8', 'Hp', 650.32),
+(17, 36, 'Ordenador sobremesa', 'Hp Z4 G4', 'Hp', 1700.12),
+(18, 36, 'Ordenador sobremesa', 'Hp Z2 Mini', 'Hp', 509.99);
+
+
 
 -- --------------------------------------------------------
 
@@ -109,7 +120,7 @@ INSERT INTO `usuarios` (`usuario`, `password`, `identidad`) VALUES
 -- Indices de la tabla `linea_pedido`
 --
 ALTER TABLE `linea_pedido`
-  ADD PRIMARY KEY (`idPedido`,`idProducto`);
+  ADD PRIMARY KEY (`idPedido`,`idProducto`,`unidades`);
 
 --
 -- Indices de la tabla `pedidos`
@@ -150,11 +161,11 @@ ALTER TABLE `productos`
 --
 
 --
--- Filtros para la tabla `linea_pedido`
+-- Agregamos las nuevas restricciones
 --
 ALTER TABLE `linea_pedido`
-  ADD CONSTRAINT `borrado` FOREIGN KEY (`idPedido`) REFERENCES `pedidos` (`idPedido`) ON DELETE CASCADE ON UPDATE NO ACTION;
-COMMIT;
+    ADD CONSTRAINT `fk_linea_pedido_pedidos` FOREIGN KEY (`idPedido`) REFERENCES `pedidos` (`idPedido`) ON DELETE CASCADE ON UPDATE NO ACTION,
+    ADD CONSTRAINT `fk_linea_pedido_productos` FOREIGN KEY (`idProducto`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- Encriptar contraseñas utilizando SHA-256
 UPDATE usuarios SET password = SHA2(password, 256);
@@ -162,26 +173,21 @@ UPDATE usuarios SET password = SHA2(password, 256);
 --TRIGGER PARA ACTUALIZAR EL STOCK
 DELIMITER $$
 CREATE TRIGGER actualizar_stock
-BEFORE INSERT ON linea_pedido
+AFTER INSERT ON linea_pedido
 FOR EACH ROW
 BEGIN
-    DECLARE stock_actual INT;
-    SET stock_actual = (
-        SELECT stock
+    IF EXISTS (
+        SELECT 1
         FROM productos
-        WHERE id = NEW.idProducto
-    );
-    IF stock_actual <= 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No hay stock disponible para este producto.';
+        WHERE id = NEW.idProducto AND stock < NEW.unidades
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No hay suficiente stock disponible para este producto.';
     ELSE
         UPDATE productos
-        SET stock = stock - 1
+        SET stock = stock - NEW.unidades
         WHERE id = NEW.idProducto;
     END IF;
 END;
 $$
+DELIMITER ;
 
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
