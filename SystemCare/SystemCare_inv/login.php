@@ -1,8 +1,8 @@
 <?php
 // Definir las credenciales de conexión
 $servername = "localhost";
-$username = "root";
-$password = "";
+$username = "systemadmin";
+$password = "abc123.";
 $dbname = "SystemCare_inv";
 
 session_start();

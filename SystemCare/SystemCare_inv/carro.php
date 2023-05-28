@@ -6,16 +6,16 @@ if (!isset($_SESSION['usuario'])) {
     exit;
 }
 
-if (isset($_POST['id']) && isset($_POST['categoria']) && isset($_POST['color']) && isset($_POST['marca']) && isset($_POST['precio'])) {
+if (isset($_POST['id']) && isset($_POST['categoria']) && isset($_POST['caracteristicas']) && isset($_POST['distribuidor']) && isset($_POST['precio'])) {
     // Obtener los datos del producto desde el formulario
     $id = $_POST['id'];
     $categoria = $_POST['categoria'];
-    $color = $_POST['color'];
-    $marca = $_POST['marca'];
+    $caracteristicas = $_POST['caracteristicas'];
+    $distribuidor = $_POST['distribuidor'];
     $precio = $_POST['precio'];
 
     // Agregar los datos del producto al array del carro en la variable de sesión
-    $producto = array('id' => $id, 'categoria' => $categoria, 'color' => $color, 'marca' => $marca, 'precio' => $precio);
+    $producto = array('id' => $id, 'categoria' => $categoria, 'caracteristicas' => $caracteristicas, 'distribuidor' => $distribuidor, 'precio' => $precio);
     $_SESSION['carro'][] = $producto;
 }
 

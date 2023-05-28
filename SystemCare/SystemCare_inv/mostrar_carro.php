@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda</title>
+    <title>Carro</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="fondo">
@@ -22,13 +22,12 @@ if (!isset($_SESSION['carro'])) {
 include_once('header.php');
 ?>
 
-<h2>Carrito de Compras</h2>
 
 <table id='categorias'>
     <tr>
         <th>Producto</th>
-        <th>Color</th>
-        <th>Marca</th>
+        <th>Características</th>
+        <th>Distribuidor</th>
         <th>Precio</th>
         <th>🛒</th>
     </tr>
@@ -41,8 +40,8 @@ include_once('header.php');
         foreach ($_SESSION['carro'] as $key => $producto) {
             echo '<tr>';
             echo '<td>' . $producto['categoria'] . '</td>';
-            echo '<td>' . $producto['color'] . '</td>';
-            echo '<td>' . $producto['marca'] . '</td>';
+            echo '<td>' . $producto['caracteristicas'] . '</td>';
+            echo '<td>' . $producto['distribuidor'] . '</td>';
             echo '<td>' . number_format($producto['precio'], 2, ',', '.') . ' €</td>';
             echo '<td>';
             echo '<form method="POST" action="eliminar.php">';
