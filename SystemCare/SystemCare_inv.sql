@@ -99,18 +99,18 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`usuario`, `password`, `identidad`) VALUES
-('dgarcia', 'abc123.', 'Daniel Garcia Figueroa'),
+('dgarcia', 'abc123.', 'Daniel García Figueroa'),
 ('jferreiro', 'abc123.', 'Joam Ferreiro Garrote '),
-('afernandez', 'abc123.', 'Ana Fernandez Feal'),
-('xgarcia', 'abc123.', 'Xalo Garcia Teijido'),
-('psanchez', 'abc123.', 'Pablo Sanchez Lopez'),
-('mlopez', 'abc123.', 'Manuel Lopez Figueroa'),
-('ateijido', 'abc123.', 'Alejandro Teijido Fernandez'),
-('pvazquez', 'abc123.', 'Pablo Vazquez García'),
-('dpena', 'abc123.', 'David Pena Sanchez'),
+('afernandez', 'abc123.', 'Ana Fernández Feal'),
+('xgarcia', 'abc123.', 'Xalo García Teijido'),
+('psanchez', 'abc123.', 'Pablo Sánchez López'),
+('mlopez', 'abc123.', 'Manuel López Figueroa'),
+('ateijido', 'abc123.', 'Alejandro Teijido Fernández'),
+('pvazquez', 'abc123.', 'Pablo Vázquez García'),
+('dpena', 'abc123.', 'David Pena Sánchez'),
 ('jgarrote', 'abc123.', 'Joel Garrote Feal'),
 ('bfeal', 'abc123.', 'Beatriz Feal García'),
-('egarcia', 'abc123.', 'Enrique Garcia Couce');
+('egarcia', 'abc123.', 'Enrique García Couce');
 
 --
 -- Índices para tablas volcadas
