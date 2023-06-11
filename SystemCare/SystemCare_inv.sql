@@ -99,18 +99,18 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`usuario`, `password`, `identidad`) VALUES
-('dgarcia', 'abc123.', 'Daniel García Figueroa'),
+('dgarcia', 'abc123.', 'Daniel Garcia Figueroa'),
 ('jferreiro', 'abc123.', 'Joam Ferreiro Garrote '),
-('afernandez', 'abc123.', 'Ana Fernández Feal'),
-('xgarcia', 'abc123.', 'Xalo García Teijido'),
-('psanchez', 'abc123.', 'Pablo Sánchez López'),
-('mlopez', 'abc123.', 'Manuel López Figueroa'),
-('ateijido', 'abc123.', 'Alejandro Teijido Fernández'),
-('pvazquez', 'abc123.', 'Pablo Vázquez García'),
-('dpena', 'abc123.', 'David Pena Sánchez'),
+('afernandez', 'abc123.', 'Ana Fernandez Feal'),
+('xgarcia', 'abc123.', 'Xalo Garcia Teijido'),
+('psanchez', 'abc123.', 'Pablo Sanchez Lopez'),
+('mlopez', 'abc123.', 'Manuel Lopez Figueroa'),
+('ateijido', 'abc123.', 'Alejandro Teijido Fernandez'),
+('pvazquez', 'abc123.', 'Pablo Vazquez García'),
+('dpena', 'abc123.', 'David Pena Sanchez'),
 ('jgarrote', 'abc123.', 'Joel Garrote Feal'),
 ('bfeal', 'abc123.', 'Beatriz Feal García'),
-('egarcia', 'abc123.', 'Enrique García Couce');
+('egarcia', 'abc123.', 'Enrique Garcia Couce');
 
 --
 -- Índices para tablas volcadas
@@ -163,6 +163,8 @@ ALTER TABLE `productos`
 --
 -- Agregamos las nuevas restricciones
 --
+ALTER TABLE `pedidos`
+	ADD CONSTRAINT `fk_pedidos_usuarios1` FOREIGN KEY (`usuario`) REFERENCES `SystemCare_inv`.`usuarios` (`usuario`)ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `linea_pedido`
     ADD CONSTRAINT `fk_linea_pedido_pedidos` FOREIGN KEY (`idPedido`) REFERENCES `pedidos` (`idPedido`) ON DELETE CASCADE ON UPDATE NO ACTION,
     ADD CONSTRAINT `fk_linea_pedido_productos` FOREIGN KEY (`idProducto`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
